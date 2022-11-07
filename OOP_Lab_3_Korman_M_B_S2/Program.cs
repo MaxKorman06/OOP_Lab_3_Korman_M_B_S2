@@ -185,68 +185,139 @@ namespace OOP_Lab_3_Korman_M_B_S2
             {
                 this.listOfManufacturersOfParts = listOfManufacturersOfParts;
             }
-            public bool this[Computer Laptop]
+            public bool indexator(Computer arr)
             {
-                get
+                if (arr == typeComputer)
                 {
-                    if (this.typeComputer == Laptop)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
+
             public void AddSpecifications(params Specifications[] arr)
             {
-                listOfManufacturersOfParts = listOfManufacturersOfParts.Concat(arr).ToArray();
+                listOfManufacturersOfParts = arr;
             }
             public override string ToString()
             {
-                return "Description Of The Technique: " + getDescriptionOfTheTechnique() + " Type Computer: " + getTypeComputer() + " Date Release: " + getDateRelease() + " Version Release: " + getVersionRelease() + "List Of Manufacturers Of Parts: " + getListOfManufacturersOfParts();
+                return "Description Of The Technique: " + getDescriptionOfTheTechnique() + "\nType Computer: " + getTypeComputer() + "\nDate Release: " + getDateRelease() + "\nVersion Release: " + getVersionRelease() + "\nList Of Manufacturers Of Parts: " + getListOfManufacturersOfParts();
             }
             virtual public string ToShortString()
             {
-                return "Description Of The Technique: " + getDescriptionOfTheTechnique() + " Type Computer: " + getTypeComputer() + " Date Release: " + getDateRelease() + " Version Release: " + getVersionRelease();
+                return "Description Of The Technique: " + getDescriptionOfTheTechnique() + "\nType Computer: " + getTypeComputer() + "\nDate Release: " + getDateRelease() + "\nVersion Release: " + getVersionRelease();
             }
         }
         static void Main(string[] args)
         {
+            // Підпункт 1
+            ExtendedSpecifications a = new ExtendedSpecifications();
+            Console.WriteLine("\n\nЗавдання 1\n\n" + a.ToShortString());
+
+            // Підпункт 2
+            Console.WriteLine("\n\nЗавдання 2\n\n" + "\nПеревірка на рівність: " + a.indexator(Computer.PersonalComputer));
+            Console.WriteLine("\nПеревірка на рівність: " + a.indexator(Computer.Laptop));
+
+            // Підпункт 3
+            ExtendedSpecifications b = new ExtendedSpecifications("asd", Computer.Laptop, System.DateTime.Now, 1);
+            Console.WriteLine("\n\nЗавдання 3\n\n" + "\n" + b);
+
+            // Підпункт 4
+            ExtendedSpecifications сClass = new ExtendedSpecifications();
+            Specifications[] spec = new Specifications[1];
+            spec[0] = new Specifications();
+            сClass.AddSpecifications(spec[0]);
+            Console.WriteLine("\n\nЗавдання 4\n\n" + "\n" + spec[0]);
+
+            // Підпункт 5
             string arrSize;
             int nrow, ncolum;
             char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
 
-            Console.WriteLine("Для визначення розімуру масиву використовуйте запис двох цифо розподілених пробілом або комою(крапкою)");
+            Console.WriteLine("\n\nЗавдання 5\n\n" + "Для визначення розімуру масиву використовуйте запис двох цифо розподілених пробілом або комою(крапкою)");
             arrSize = Console.ReadLine();
             string[] decoupleddArrSize = arrSize.Split(delimiterChars);
             
             nrow = Convert.ToInt32(decoupleddArrSize[0]);
             ncolum = Convert.ToInt32(decoupleddArrSize[1]);
 
-            int timeStart1, timeFinish1, timeStart2, timeFinis2, timeStart3, timeFinis3;
+            Specifications[] arr_v1 = new Specifications[ncolum * nrow];
+            Specifications[,] arr_v2 = new Specifications[ncolum, nrow];
+            Specifications[][] arr_v3 = new Specifications[ncolum][];
+            for (int i = 0; i < ncolum; i++)
+            {
+                if (i == ncolum - 1)
+                {
+                    arr_v3[i] = new Specifications[(ncolum * nrow) - i];
+                    break;
+                }
+                arr_v3[i] = new Specifications[1];
+            }
 
-            timeStart1 = System.Environment.TickCount;
 
-            Console.WriteLine(nrow + "\n" + ncolum);
+            // Одновимірний масив
+            Console.WriteLine("Час обчислення одновимірного маиву");
+            int timeStart1 = Environment.TickCount & Int32.MaxValue;
 
-            timeFinish1 = System.Environment.TickCount;
+            for (int i = 0; i < ncolum * nrow; i++)
+            {
+                arr_v1[i] = new Specifications();
+            }
+            
+            int timeFinish1 = Environment.TickCount & Int32.MaxValue;
+            Console.WriteLine(timeFinish1 - timeStart1 + "\n");
+            // Одновимірний масив
 
-            Console.WriteLine(timeFinish1 - timeStart1);
+            // Двовимірний масив
+            Console.WriteLine("Час обчислення двовимірного маиву");
+            int timeStart2 = Environment.TickCount & Int32.MaxValue;
 
-            Specifications aasd = new Specifications();
+            for (int i = 0; i < ncolum; i++)
+            {
+                for (int j = 0; j < nrow; j++)
+                {
+                    arr_v2[i, j] = new Specifications();
+                }
+            }
 
-            Console.WriteLine(aasd);
+            int timeFinish2 = Environment.TickCount & Int32.MaxValue;
+
+            Console.WriteLine(timeFinish2 - timeStart2 + "\n");
+            // Двовимірний масив
+
+            // Ступінчастий масив
+            Console.WriteLine("Час обчислення ступінчастого маиву");
+            int timeStart3 = Environment.TickCount & Int32.MaxValue;
+
+            for (int i = 0; i < ncolum; i++)
+            {
+                if (i == ncolum - 1)
+                {
+                    for (int j = 0; j < (ncolum * nrow) - i; j++)
+                    {
+                        arr_v3[i][j] = new Specifications();
+                    }
+                    break;
+                }
+                arr_v3[i][0] = new Specifications();
+
+            }
+            int timeFinish3 = Environment.TickCount & Int32.MaxValue;
+
+            Console.WriteLine(timeFinish3 - timeStart3 + "\n");
+            // Ступінчастий масив
+
             /*int Year = 2000;
-            System.DateTime a;
-            a = new DateTime();
-            a = a.AddYears(3000);
-            Console.WriteLine(a);
-            a = a.AddYears(-a.Year + 1);
-            Console.WriteLine(a);
-            a = a.AddYears(Year - 1);
-            Console.WriteLine(a);
+            System.DateTime d;
+            d = new DateTime();
+            d = d.AddYears(3000);
+            Console.WriteLine(d);
+            d = d.AddYears(-d.Year + 1);
+            Console.WriteLine(d);
+            d = d.AddYears(Year - 1);
+            Console.WriteLine(d);
             Person person = new Person();
             person.setYearBirth(2000);
             Console.WriteLine(person);
